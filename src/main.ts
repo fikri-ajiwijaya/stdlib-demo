@@ -10,6 +10,8 @@ import {
 }
 from './shader.js'
 
+import Float32Array from '@stdlib/array/float32'
+
 function main() {
 	const canvas = document.querySelector('#gl_canvas')
 	if (!canvas) {
@@ -69,12 +71,12 @@ function main() {
 	gl.uniformMatrix4fv(
 		program_info.uniform_locations.transform,
 		false,
-		[
+		new Float32Array([
 			0.5, 0.0, 0.0, 0.0,
 			0.0, 0.5, 0.0, 0.0,
 			0.0, 0.0, 0.5, 0.0,
 			0.0, 0.0, 0.0, 1.0
-		]
+		])
 	)
 
 	gl.enable(gl.DEPTH_TEST)
