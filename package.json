@@ -3,5 +3,9 @@
 	"devDependencies": {
 		"@types/node": "^25.5.0",
 		"typescript": "^6.0.2"
+	},
+	"scripts": {
+		"build": "npx tsc && cp src/**.html build/",
+		"clean": "rm -rf build/ tsconfig.tsbuildinfo"
 	}
 }
