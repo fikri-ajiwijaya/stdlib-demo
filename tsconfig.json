@@ -8,7 +8,6 @@
 		"allowArbitraryExtensions": false,
 		"allowImportingTsExtensions": false,
 		"allowJs": false,
-		"allowSyntheticDefaultImports": false,
 		"allowUmdGlobalAccess": false,
 		"allowUnreachableCode": false,
 		"allowUnusedLabels": false,
@@ -41,6 +40,6 @@
 		"strictFunctionTypes": true,
 		"strictNullChecks": true,
 		"useDefineForClassFields": true,
-		"useUnknownInCatchVariables": true,
+		"useUnknownInCatchVariables": true
 	}
 }
