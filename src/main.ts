@@ -11,6 +11,8 @@ import {
 from './shader.js'
 
 import Float32Array from '@stdlib/array/float32'
+import Float64Array from '@stdlib/array/float64'
+import dgemm from '@stdlib/blas/base/dgemm'
 
 function main() {
 	const canvas = document.querySelector('#gl_canvas')
@@ -37,47 +39,69 @@ function main() {
 		return null
 	}
 
-	const program_info = create_program_info(gl, program)
-
 	gl.useProgram(program)
 
-	const positions = [
-		 1.0,  1.0,
-		-1.0,  1.0,
-		 1.0, -1.0,
-		-1.0, -1.0
-
-	]
+	const program_info = create_program_info(gl, program)
 	const buffer_position = gl.createBuffer()
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffer_position)
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
+
 	{
+		const positions = [
+			 1.0,  1.0,
+			-1.0,  1.0,
+			 1.0, -1.0,
+			-1.0, -1.0
+		]
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
 		const num_components = 2
 		const type = gl.FLOAT
 		const normalize = false
 		const stride = 0
 		const offset = 0
-		gl.vertexAttribPointer(
-			program_info.attrib_locations.position,
-			num_components,
-			type,
-			normalize,
-			stride,
-			offset
-		)
+		gl.vertexAttribPointer(program_info.attrib_locations.position, num_components, type, normalize, stride, offset)
 	}
 	gl.enableVertexAttribArray(program_info.attrib_locations.position)
 
-	gl.uniformMatrix4fv(
-		program_info.uniform_locations.transform,
-		false,
-		new Float32Array([
-			0.5, 0.0, 0.0, 0.0,
-			0.0, 0.5, 0.0, 0.0,
-			0.0, 0.0, 0.5, 0.0,
-			0.0, 0.0, 0.0, 1.0
+	const frustum = (() => {
+		const aspect = canvas.width / canvas.height
+		const r =  aspect
+		const l = -aspect
+		const t =  1.0
+		const b = -1.0
+		const n = 0.1
+		const f = 10.0
+		return new Float64Array([
+			2.0*n/(r-l),        0.0,           0.0,  0.0,
+			        0.0, 2.0*n/(t-b),          0.0,  0.0,
+			(r+l)/(r-l), (t+b)/(t-b),  (f+n)/(n-f), -1.0,
+			        0.0,        0.0, 2.0*f*n/(n-f),  0.0
 		])
-	)
+	})()
+
+	const translate = new Float64Array([
+		1.0, 0.0,  0.0, 0.0,
+		0.0, 1.0,  0.0, 0.0,
+		0.0, 0.0,  1.0, 0.0,
+		0.0, 0.0, -0.5, 1.0
+	])
+
+	const transform = (() => {
+		const A = frustum
+		const B = translate
+		var C = new Float64Array(16)
+		dgemm(
+			'column-major',
+			'no-transpose',
+			'no-transpose',
+			4, 4, 4,
+			1.0, A, 4,
+			B, 4, 1.0,
+			C, 4
+		)
+		return C
+	})()
+
+	gl.uniformMatrix4fv(program_info.uniform_locations.transform, false, transform)
 
 	gl.enable(gl.DEPTH_TEST)
 	gl.depthFunc(gl.LEQUAL)
