@@ -10,9 +10,13 @@ import {
 }
 from './shader.js'
 
-import Float32Array from '@stdlib/array/float32'
-import Float64Array from '@stdlib/array/float64'
-import dgemm from '@stdlib/blas/base/dgemm'
+import {
+	create_frustum,
+	create_translate,
+	multiply,
+	serialize
+}
+from './matrix.js'
 
 function main() {
 	const canvas = document.querySelector('#gl_canvas')
@@ -62,43 +66,13 @@ function main() {
 	}
 	gl.enableVertexAttribArray(program_info.attrib_locations.position)
 
-	const frustum = (() => {
-		const aspect = canvas.width / canvas.height
-		const r =  aspect
-		const l = -aspect
-		const t =  1.0
-		const b = -1.0
-		const n = 0.1
-		const f = 10.0
-		return new Float64Array([
-			2.0*n/(r-l),        0.0,           0.0,  0.0,
-			        0.0, 2.0*n/(t-b),          0.0,  0.0,
-			(r+l)/(r-l), (t+b)/(t-b),  (f+n)/(n-f), -1.0,
-			        0.0,        0.0, 2.0*f*n/(n-f),  0.0
-		])
-	})()
-
-	const translate = new Float64Array([
-		1.0, 0.0,  0.0, 0.0,
-		0.0, 1.0,  0.0, 0.0,
-		0.0, 0.0,  1.0, 0.0,
-		0.0, 0.0, -0.5, 1.0
-	])
-
 	const transform = (() => {
-		const A = frustum
-		const B = translate
-		var C = new Float64Array(16)
-		dgemm(
-			'column-major',
-			'no-transpose',
-			'no-transpose',
-			4, 4, 4,
-			1.0, A, 4,
-			B, 4, 1.0,
-			C, 4
-		)
-		return C
+		const aspect = canvas.width / canvas.height
+		const frustum = create_frustum(aspect, -aspect, 1.0, -1.0, 0.1, 10.0)
+		const translate = create_translate(0.0, 0.0, -0.5)
+		const transform = multiply(frustum, translate)
+		const buf = serialize(transform, 'column-major')
+		return buf
 	})()
 
 	gl.uniformMatrix4fv(program_info.uniform_locations.transform, false, transform)

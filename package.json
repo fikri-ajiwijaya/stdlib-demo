@@ -9,6 +9,7 @@
 		"clean": "rm -rf build/ tsconfig.tsbuildinfo"
 	},
 	"dependencies": {
+		"@stdlib/ndarray-flatten": "^0.1.1",
 		"@stdlib/stdlib": "^0.3.2"
 	}
 }

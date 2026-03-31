@@ -34,7 +34,7 @@
 		"resolvePackageJsonExports": true,
 		"resolvePackageJsonImports": true,
 		"skipDefaultLibCheck": false,
-		"skipLibCheck": false,
+		"skipLibCheck": true,
 		"strict": true,
 		"strictBindCallApply": true,
 		"strictFunctionTypes": true,
