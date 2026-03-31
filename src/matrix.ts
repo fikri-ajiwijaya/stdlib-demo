@@ -40,6 +40,42 @@ function create_scale(
 	})
 }
 
+function create_rotate(
+	by : 'x' | 'y' | 'z',
+	t : number
+)
+: ndarray
+{
+	const sin_t = Math.sin(t)
+	const cos_t = Math.cos(t)
+	const buf = (() => {
+		switch(by) {
+			case 'x': return new Float32Array([
+				1,     0,      0, 0,
+				0, cos_t, -sin_t, 0,
+				0, sin_t,  cos_t, 0,
+				0,     0,      0, 1
+			])
+			case 'y': return new Float32Array([
+				 cos_t, 0, sin_t, 0,
+				     0, 1,     0, 0,
+				-sin_t, 0, cos_t, 0,
+				     0, 0,     0, 1
+			])
+			case 'z': return new Float32Array([
+				cos_t, -sin_t, 0, 0,
+				sin_t,  cos_t, 0, 0,
+				    0,      0, 1, 0,
+				    0,      0, 0, 1
+			])
+		}
+	})()
+	return array(buf, {
+		'dtype' : 'float32',
+		'shape' : [4, 4]
+	})
+}
+
 function create_translate(
 	x : number, y : number, z : number
 )
@@ -111,6 +147,7 @@ function serialize(
 export {
 	create_frustum,
 	create_scale,
+	create_rotate,
 	create_translate,
 	multiply,
 	serialize

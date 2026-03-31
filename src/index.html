@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>stdlib-js demo</title>
+	<link rel="stylesheet" href="style.css">
 	<script type="importmap">
 	{
 		"imports": {
@@ -20,6 +21,22 @@
 	<script src="main.js" type="module"></script>
 </head>
 <body>
-	<canvas id="gl_canvas" width="640" height="480"></canvas>
+	<div class="main-container">
+		<div class="slider-container">
+			<div class="slider-row">
+				<label for="yaw">Yaw:</label>
+				<input id="yaw" type="range" min="-180" max="180" value="0">
+			</div>
+			<div class="slider-row">
+				<label for="roll">Roll:</label>
+				<input id="roll" type="range" min="-180" max="180" value="0">
+			</div>
+			<div class="slider-row">
+				<label for="pitch">Pitch:</label>
+				<input id="pitch" type="range" min="-180" max="180" value="0">
+			</div>
+		</div>
+		<canvas id="gl_canvas" width="640" height="480"></canvas>
+	</div>
 </body>
 </html>

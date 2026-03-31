@@ -13,25 +13,27 @@ const fragment_shader_source = `
 	}
 `
 
+type program_info_t = {
+	attrib_locations : {
+		position : number
+	},
+	uniform_locations : {
+		transform : WebGLUniformLocation
+	}
+}
+
 function create_program_info(
 	gl : WebGLRenderingContext,
 	program : WebGLProgram
 )
-: {
-		attrib_locations : {
-			position : number
-		},
-		uniform_locations : {
-			transform : WebGLUniformLocation | null
-		}
-}
+: program_info_t
 {
 	return {
 		attrib_locations : {
 			position : gl.getAttribLocation(program, 'position')
 		},
 		uniform_locations : {
-			transform : gl.getUniformLocation(program, 'transform')
+			transform : gl.getUniformLocation(program, 'transform')!
 		}
 	}
 }
@@ -39,5 +41,6 @@ function create_program_info(
 export {
 	vertex_shader_source,
 	fragment_shader_source,
+	program_info_t,
 	create_program_info
 }
