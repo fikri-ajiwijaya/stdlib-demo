@@ -64,25 +64,44 @@ function main() {
 	gl.useProgram(program)
 
 	const program_info = create_program_info(gl, program)
-	const buffer_position = gl.createBuffer()
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffer_position)
 
 	{
-		const positions = [
+		const positions = new Float32Array([
 			 1,  1,
 			-1,  1,
 			 1, -1,
 			-1, -1
-		]
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
+		])
+		const buffer_position = gl.createBuffer()
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffer_position)
+		gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW)
 		const num_components = 2
 		const type = gl.FLOAT
 		const normalize = false
 		const stride = 0
 		const offset = 0
 		gl.vertexAttribPointer(program_info.attrib_locations.position, num_components, type, normalize, stride, offset)
+		gl.enableVertexAttribArray(program_info.attrib_locations.position)
 	}
-	gl.enableVertexAttribArray(program_info.attrib_locations.position)
+
+	{
+		const colors = new Float32Array([
+			1, 0, 0,
+			0, 1, 0,
+			0, 0, 1,
+			0, 1, 1
+		])
+		const buffer_color = gl.createBuffer()
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffer_color)
+		gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW)
+		const num_components = 3
+		const type = gl.FLOAT
+		const normalize = false
+		const stride = 0
+		const offset = 0
+		gl.vertexAttribPointer(program_info.attrib_locations.color, num_components, type, normalize, stride, offset)
+		gl.enableVertexAttribArray(program_info.attrib_locations.color)
+	}
 
 	const aspect = canvas.width / canvas.height
 	const frustum = create_frustum(aspect, -aspect, 1, -1, .1, 2)

@@ -1,21 +1,29 @@
 const vertex_shader_source = `
 	attribute vec4 position;
+	attribute vec4 color;
+
 	uniform mat4 transform;
+
+	varying lowp vec4 vcolor;
 
 	void main() {
 		gl_Position = transform * position;
+		vcolor = color;
 	}
 `
 
 const fragment_shader_source = `
+	varying lowp vec4 vcolor;
+
 	void main() {
-		gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+		gl_FragColor = vcolor;
 	}
 `
 
 type program_info_t = {
 	attrib_locations : {
-		position : number
+		position : number,
+		color : number
 	},
 	uniform_locations : {
 		transform : WebGLUniformLocation
@@ -30,7 +38,8 @@ function create_program_info(
 {
 	return {
 		attrib_locations : {
-			position : gl.getAttribLocation(program, 'position')
+			position : gl.getAttribLocation(program, 'position'),
+			color : gl.getAttribLocation(program, 'color')
 		},
 		uniform_locations : {
 			transform : gl.getUniformLocation(program, 'transform')!
