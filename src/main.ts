@@ -67,15 +67,19 @@ function main() {
 
 	{
 		const positions = new Float32Array([
-			 1,  1,
-			-1,  1,
-			 1, -1,
-			-1, -1
+			 1,  1, -1, -1,  1, -1,  1, -1, -1,
+			-1,  1, -1, -1, -1, -1,  1, -1, -1,
+
+			-1,  1,  1, -1, -1,  1, -1,  1, -1,
+			-1, -1,  1, -1, -1, -1, -1,  1, -1,
+
+			 1, -1,  1, -1, -1,  1,  1, -1, -1,
+			-1, -1,  1, -1, -1, -1,  1, -1, -1
 		])
 		const buffer_position = gl.createBuffer()
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer_position)
 		gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW)
-		const num_components = 2
+		const num_components = 3
 		const type = gl.FLOAT
 		const normalize = false
 		const stride = 0
@@ -86,10 +90,14 @@ function main() {
 
 	{
 		const colors = new Float32Array([
-			1, 0, 0,
-			0, 1, 0,
-			0, 0, 1,
-			0, 1, 1
+			1, 0, 0, 1, 0, 0, 1, 0, 0,
+			1, 0, 0, 1, 0, 0, 1, 0, 0,
+
+			0, 1, 0, 0, 1, 0, 0, 1, 0,
+			0, 1, 0, 0, 1, 0, 0, 1, 0,
+
+			0, 0, 1, 0, 0, 1, 0, 0, 1,
+			0, 0, 1, 0, 0, 1, 0, 0, 1
 		])
 		const buffer_color = gl.createBuffer()
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer_color)
@@ -104,8 +112,8 @@ function main() {
 	}
 
 	const aspect = canvas.width / canvas.height
-	const frustum = create_frustum(aspect, -aspect, 1, -1, .1, 2)
-	const translate = create_translate(0, 0, -1)
+	const frustum = create_frustum(aspect, -aspect, 1, -1, 1, 7)
+	const translate = create_translate(0, 0, -3)
 
 	gl.enable(gl.DEPTH_TEST)
 	gl.depthFunc(gl.LEQUAL)
@@ -115,8 +123,8 @@ function main() {
 
 	const rotate_draw = () => {
 		const yaw = slider_yaw.valueAsNumber / 180 * Math.PI
-		const roll = slider_roll.valueAsNumber / 180 * Math.PI
-		const pitch = slider_pitch.valueAsNumber / 180 * Math.PI
+		const roll = -slider_roll.valueAsNumber / 180 * Math.PI
+		const pitch = -slider_pitch.valueAsNumber / 180 * Math.PI
 
 		const rotate_yaw = create_rotate('y', yaw)
 		const rotate_roll = create_rotate('x', roll)
@@ -147,8 +155,8 @@ function draw(
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 	const offset = 0
-	const n = 4
-	gl.drawArrays(gl.TRIANGLE_STRIP, offset, n)
+	const n = 18
+	gl.drawArrays(gl.TRIANGLES, offset, n)
 }
 
 main()
