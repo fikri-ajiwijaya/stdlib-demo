@@ -1,0 +1,36 @@
+body {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+body::before {
+	content: "";
+	flex: 1;
+}
+
+body::after {
+	content: "";
+	flex: 2;
+}
+
+.main-container {
+	display: flex;
+	align-items: center;
+	gap: 4em;
+}
+
+.slider-container {
+	display: flex;
+	flex-direction: column;
+	gap: 1em;
+}
+
+.slider-row {
+	display: flex;
+}
+
+.slider-row label {
+	min-width: 2.5em;
+}

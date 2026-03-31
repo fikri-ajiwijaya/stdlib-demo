@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>stdlib-js demo</title>
+	<link rel="stylesheet" href="style.css">
+	<script type="importmap">
+	{
+		"imports": {
+			"@stdlib/array/float32": "https://cdn.jsdelivr.net/gh/stdlib-js/array-float32@esm/index.mjs",
+			"@stdlib/blas/base/sgemm": "https://cdn.jsdelivr.net/gh/stdlib-js/blas-base-sgemm@esm/index.mjs",
+			"@stdlib/ndarray/array": "https://cdn.jsdelivr.net/gh/stdlib-js/ndarray-array@esm/index.mjs",
+			"@stdlib/ndarray/data-buffer": "https://cdn.jsdelivr.net/gh/stdlib-js/ndarray-data-buffer@esm/index.mjs",
+			"@stdlib/ndarray-flatten": "https://cdn.jsdelivr.net/gh/stdlib-js/ndarray-flatten@esm/index.mjs",
+			"@stdlib/ndarray/zeros": "https://cdn.jsdelivr.net/gh/stdlib-js/ndarray-zeros@esm/index.mjs",
+			"@stdlib/types/ndarray": "https://cdn.jsdelivr.net/gh/stdlib-js/types-ndarray@esm/index.mjs"
+		}
+	}
+	</script>
+	<script src="main.js" type="module"></script>
+</head>
+<body>
+	<div class="main-container">
+		<div class="slider-container">
+			<div class="slider-row">
+				<label for="yaw">Yaw:</label>
+				<input id="yaw" type="range" min="-180" max="180" value="0">
+			</div>
+			<div class="slider-row">
+				<label for="roll">Roll:</label>
+				<input id="roll" type="range" min="-180" max="180" value="0">
+			</div>
+			<div class="slider-row">
+				<label for="pitch">Pitch:</label>
+				<input id="pitch" type="range" min="-180" max="180" value="0">
+			</div>
+		</div>
+		<canvas id="gl_canvas" width="640" height="480"></canvas>
+	</div>
+</body>
+</html>
